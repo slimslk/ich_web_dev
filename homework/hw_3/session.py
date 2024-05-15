@@ -1,4 +1,7 @@
 import logging
+
+import sqlalchemy
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
 from homework.hw_3 import engine, models
@@ -12,6 +15,7 @@ models.main()
 
 Session = sessionmaker(bind=engine)
 session = Session()
+session.execute(text("PRAGMA foreign_keys=ON"))
 
 game_category = Category(
     name="Games",
@@ -44,16 +48,12 @@ session.add(product_1)
 session.add(product_2)
 session.commit()
 
-category = session.query(Category).filter(Category.id == 1).first()
+category = session.query(Category).filter(Category.id == 2).first()
 
 session.delete(category)
 session.commit()
 
-categories = session.query(Category).all()
 products = session.query(Product).all()
-
-for ct in categories:
-    print(f"name={ct.name}", ct.id)
 
 for pr in products:
     print(f"prod_name={pr.name}")
